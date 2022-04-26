@@ -1,4 +1,5 @@
-﻿using DoctorPatient.Entities;
+﻿using System.Collections.Generic;
+using DoctorPatient.Entities;
 using DoctorPatient.Infrastructure.Application;
 using DoctorPatient.Services.Patients.Contracts;
 using DoctorPatient.Services.Patients.Exceptions;
@@ -36,6 +37,30 @@ namespace DoctorPatient.Services.Patients
             else
             {
                 throw new PatientNationalCodeExistException();
+            }
+        }
+
+        public IList<GetPatientDto> GetAll()
+        {
+            return _patientRepository.GetAll();
+        }
+
+        public void Update(UpdatePatientDto dto, int id)
+        {
+            var patient = _patientRepository.FindById(id);
+            var isExistsNationalCode = _patientRepository
+                .IsExistNationalCode(dto.NationalCode);
+
+            if (isExistsNationalCode == true)
+            {
+                throw new PatientNationalCodeExistException();
+            }
+            else
+            {
+                patient.FirstName = dto.FirstName;
+                patient.LastName = dto.LastName;
+                patient.NationalCode = dto.NationalCode;
+                _unitOfWork.Commit();
             }
         }
     }

@@ -46,7 +46,7 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         }
 
         [Fact]
-        public void AddThrow_DoctorIsExist_When_NationalCode_IsExist()
+        public void AddThrow_PatientIsExist_When_NationalCode_IsExist()
         {
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
@@ -64,8 +64,67 @@ namespace DoctorPatient.Services.Test.Unit.Patients
             expected.Should().ThrowExactly<PatientNationalCodeExistException>();
         }
 
+        [Fact]
+        public void GetAll_Patients_return_All()
+        {
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
 
+            _context.Manipulate(_ =>
+                _.Patients.AddRange(patient));
 
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.NationalCode == "2280509504");
+        }
+
+        [Fact]
+        public void Update_updates_Patients_Properly()
+        {
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2480509504");
+
+            _context.Manipulate(_ =>
+                _.Patients.Add(patient));
+
+            var dto = new UpdatePatientDto()
+            {
+                FirstName = "Saeed",
+                LastName = "Ansari",
+                NationalCode = "2280506504",
+                };
+
+            _sut.Update(dto, patient.Id);
+
+            _context.Patients.Should()
+                .Contain(_ => _.NationalCode == "2280506504");
+        }
+
+        [Fact]
+        public void UpdateThrow_PatientWithThisIdDoesNotExistException_if_Patient_Doesnot_Exist()
+        {
+            var testPatientid = 4152;
+
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+            _context.Manipulate(x => x.Patients.Add(patient));
+
+            UpdatePatientDto dto = new UpdatePatientDto
+            {
+                Id = 1,
+                FirstName = "Saeed",
+                LastName = "Ansari",
+                NationalCode = "2280509504"
+
+            };
+
+            Action expected = () => _sut.Update(dto, patient.Id);
+            expected.Should().ThrowExactly<PatientNationalCodeExistException>();
+
+        }
+
+        
         private static List<Patient> CreateListPatient()
         {
             var patient = new List<Patient>
