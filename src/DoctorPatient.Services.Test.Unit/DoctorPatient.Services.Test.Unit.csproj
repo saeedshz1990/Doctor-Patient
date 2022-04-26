@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Appointments\" />
-    <Folder Include="Patients\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿using DoctorPatient.Services.Patients.Contracts;
+﻿using System.Linq;
+using DoctorPatient.Entities;
+using DoctorPatient.Services.Patients.Contracts;
 
 namespace DoctorPatient.Persistence.EF.Patients
 {
@@ -9,6 +11,18 @@ namespace DoctorPatient.Persistence.EF.Patients
         public EFPatientRepository(EFDataContext context)
         {
             _context = context;
+        }
+
+        public void Add(Patient patient)
+        {
+            _context.Patients.Add(patient);
+        }
+
+        public bool IsNationalCodeExist(string nationalCode)
+        {
+            return _context
+                .Patients
+                .Any(p => p.NationalCode == nationalCode);
         }
     }
 }
