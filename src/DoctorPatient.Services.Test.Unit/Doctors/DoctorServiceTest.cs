@@ -64,7 +64,23 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
             expected.Should().ThrowExactly<DoctorNationalCodeExistException>();
         }
 
+        [Fact]
+        public void GetAll_Doctors_return_All()
+        {
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Programmer");
 
+            _context.Manipulate(_ =>
+                _.Doctors.AddRange(doctor));
+
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(1);
+            expected.Should().Contain(_ => _.NationalCode == "2280509504");
+
+        }
+
+        
         private static List<Doctor> CreateListDoctor()
         {
             var doctor = new List<Doctor>

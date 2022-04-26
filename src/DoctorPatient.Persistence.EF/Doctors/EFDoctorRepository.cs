@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DoctorPatient.Entities;
 using DoctorPatient.Services.Doctors.Contracts;
 
@@ -20,9 +21,24 @@ namespace DoctorPatient.Persistence.EF.Doctors
 
         public bool IsNationalCodeExist(string nationalCode)
         {
-           return _context
-               .Doctors
-               .Any(d => d.NationalCode == nationalCode);
+            return _context
+                .Doctors
+                .Any(d => d.NationalCode == nationalCode);
+        }
+
+        public IList<GetDoctorDto> GetAll()
+        {
+            var doctor = _context
+                .Doctors
+                .Select(_ => new GetDoctorDto
+                {
+                    Id = _.Id,
+                    FirstName = _.FirstName,
+                    LastName = _.LastName,
+                    Field = _.Field,
+                    NationalCode = _.NationalCode,
+                }).ToList();
+            return doctor;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DoctorPatient.Services.Doctors.Contracts
 {
-    public class GetUpdateDto
+    public class GetDoctorDto
     {
         public int Id { get; set; }
         public string NationalCode { get; set; }

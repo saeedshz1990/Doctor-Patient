@@ -1,4 +1,5 @@
-﻿using DoctorPatient.Entities;
+﻿using System.Collections.Generic;
+using DoctorPatient.Entities;
 using DoctorPatient.Infrastructure.Application;
 using DoctorPatient.Services.Doctors.Contracts;
 using DoctorPatient.Services.Doctors.Exceptions;
@@ -38,6 +39,11 @@ namespace DoctorPatient.Services.Doctors
                 throw new DoctorNationalCodeExistException();
             }
 
+        }
+
+        public IList<GetDoctorDto> GetAll()
+        {
+            return _doctorRepository.GetAll();
         }
     }
 }
