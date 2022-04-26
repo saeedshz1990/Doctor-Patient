@@ -124,7 +124,34 @@ namespace DoctorPatient.Services.Test.Unit.Patients
 
         }
 
-        
+        [Fact]
+        public void Delete_deletes_Doctor_Properly()
+        {
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+
+            _context.Manipulate(_ =>
+                _patientRepository.Add(patient));
+            _sut.Delete(patient.Id);
+            _context.Patients
+                .Should()
+                .HaveCount(0);
+        }
+
+        [Fact]
+        public void DeleteThrow_DoctorId_IsNotExistInDatabse()
+        {
+            var testPatientId = 415;
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+
+            _context.Manipulate(_ => _.Patients.Add(patient));
+            Action expected = () => _sut.Delete(testPatientId);
+            expected.Should().ThrowExactly<PatientIdDoesNotExistException>();
+
+
+        }
+
         private static List<Patient> CreateListPatient()
         {
             var patient = new List<Patient>

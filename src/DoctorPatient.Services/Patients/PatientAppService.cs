@@ -63,5 +63,19 @@ namespace DoctorPatient.Services.Patients
                 _unitOfWork.Commit();
             }
         }
+
+        public void Delete(int id)
+        {
+            var patient = _patientRepository.FindById(id);
+            if (patient != null)
+            {
+                _patientRepository.Delete(id);
+                _unitOfWork.Commit();
+            }
+            else
+            {
+                throw new PatientIdDoesNotExistException();
+            }
+        }
     }
 }

@@ -56,5 +56,14 @@ namespace DoctorPatient.Persistence.EF.Patients
                 .Patients
                 .Any(d => d.NationalCode == nationalCode);
         }
+
+        public void Delete(int id)
+        {
+            var patient = _context
+                .Patients
+                .FirstOrDefault(_ => _.Id == id);
+
+            _context.Remove(patient);
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace DoctorPatient.Services.Patients.Contracts
         void Update(Patient patient, int id);
         Patient FindById(int id);
         bool IsExistNationalCode(string nationalCode);
+        void Delete(int id);
     }
 }
