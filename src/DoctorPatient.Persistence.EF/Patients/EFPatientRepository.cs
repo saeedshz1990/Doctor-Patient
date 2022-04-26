@@ -1,6 +1,8 @@
-﻿namespace DoctorPatient.Persistence.EF.Patients
+﻿using DoctorPatient.Services.Patients.Contracts;
+
+namespace DoctorPatient.Persistence.EF.Patients
 {
-    public class EFPatientRepository
+    public class EFPatientRepository : PatientRepository
     {
     }
 }

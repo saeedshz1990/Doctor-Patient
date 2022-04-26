@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorPatient.Migrations", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorPatient.Persistence.EF", "DoctorPatient.Persistence.EF\DoctorPatient.Persistence.EF.csproj", "{805000FD-C6C6-4632-B403-13366C902755}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorPatient.RestAPI", "DoctorPatient.RestAPI\DoctorPatient.RestAPI.csproj", "{2A7C730A-AC73-4F56-9012-FC6AA5B4120F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorPatient.Services", "DoctorPatient.Services\DoctorPatient.Services.csproj", "{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{805000FD-C6C6-4632-B403-13366C902755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{805000FD-C6C6-4632-B403-13366C902755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{805000FD-C6C6-4632-B403-13366C902755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A7C730A-AC73-4F56-9012-FC6AA5B4120F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A7C730A-AC73-4F56-9012-FC6AA5B4120F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A7C730A-AC73-4F56-9012-FC6AA5B4120F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A7C730A-AC73-4F56-9012-FC6AA5B4120F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +58,8 @@ Global
 		{1ADB50A7-1879-478A-A7A1-3445CCF37AD3} = {EA218A86-DC7C-422E-8254-9077133ED9D8}
 		{76F3CF6D-041F-41E2-9FD5-395C5E89F9C8} = {EA218A86-DC7C-422E-8254-9077133ED9D8}
 		{805000FD-C6C6-4632-B403-13366C902755} = {EA218A86-DC7C-422E-8254-9077133ED9D8}
+		{2A7C730A-AC73-4F56-9012-FC6AA5B4120F} = {EA218A86-DC7C-422E-8254-9077133ED9D8}
+		{F17EE8AE-341A-4702-8C7B-2BC1A62D7BDA} = {EA218A86-DC7C-422E-8254-9077133ED9D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47E5F050-2835-42B1-A415-67D1978D0271}

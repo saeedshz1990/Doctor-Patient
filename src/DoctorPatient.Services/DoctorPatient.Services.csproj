@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Appointments\Exceptions\" />
+    <Folder Include="Doctors\Exceptions\" />
+    <Folder Include="Patients\Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DoctorPatient.Infrastructure\DoctorPatient.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

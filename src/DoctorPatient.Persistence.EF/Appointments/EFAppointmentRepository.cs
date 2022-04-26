@@ -1,6 +1,8 @@
-﻿namespace DoctorPatient.Persistence.EF.Appointments
+﻿using DoctorPatient.Services.Appointments.Contracts;
+
+namespace DoctorPatient.Persistence.EF.Appointments
 {
-    public class EFAppointmentRepository
+    public class EFAppointmentRepository : AppointmentRepository
     {
     }
 }
