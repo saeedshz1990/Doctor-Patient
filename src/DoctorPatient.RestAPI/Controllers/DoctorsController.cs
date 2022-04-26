@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DoctorPatient.Services.Doctors.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorPatient.RestAPI.Controllers
@@ -7,5 +8,16 @@ namespace DoctorPatient.RestAPI.Controllers
     [ApiController]
     public class DoctorsController : ControllerBase
     {
+        private readonly DoctorService _doctorService;
+
+        public DoctorsController(DoctorService doctorService)
+        {
+            _doctorService = doctorService;
+        }
+        [HttpPost]
+        public void AddDoctor(AddDoctorDto dto)
+        {
+            _doctorService.Add(dto);
+        }
     }
 }

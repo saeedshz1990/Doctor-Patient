@@ -1,5 +1,4 @@
-﻿using System;
-using DoctorPatient.Entities;
+﻿using DoctorPatient.Entities;
 using DoctorPatient.Persistence.EF.Doctors;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,16 +10,19 @@ namespace DoctorPatient.Persistence.EF
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
 
-        public EFDataContext(DbContextOptions<EFDataContext> options) : base(options)
-        {
-        }
         //public EFDataContext(string connectionString) :
         //    this(new DbContextOptionsBuilder().UseSqlServer(connectionString).Options)
         //{ }
+        
+        public EFDataContext(DbContextOptions<EFDataContext> options) : base(options)
+        {
+        }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DoctorEntityMap).Assembly);
         }
     }

@@ -2,7 +2,7 @@
 
 namespace DoctorPatient.Services.Appointments.Contracts
 {
-    public interface AppointmentsService :Service
+    public interface AppointmentService :Service
     {
     }
 }

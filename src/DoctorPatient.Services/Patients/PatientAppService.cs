@@ -2,7 +2,7 @@
 
 namespace DoctorPatient.Services.Patients
 {
-    public class EFPatientAppService :PatientService
+    public class PatientAppService :PatientService
     {
     }
 }

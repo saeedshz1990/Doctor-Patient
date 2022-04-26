@@ -5,13 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Appointments\Exceptions\" />
-    <Folder Include="Patients\Exceptions\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DoctorPatient.Entities\DoctorPatient.Entities.csproj" />
-    <ProjectReference Include="..\DoctorPatient.Infrastructure\DoctorPatient.Infrastructure.csproj" />
+    <ProjectReference Include="..\DoctorPatient.Services\DoctorPatient.Services.csproj" />
   </ItemGroup>
 
 </Project>

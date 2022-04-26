@@ -15,6 +15,7 @@ using Autofac;
 using DoctorPatient.Infrastructure.Application;
 using DoctorPatient.Persistence.EF;
 using DoctorPatient.Persistence.EF.Doctors;
+using DoctorPatient.Services.Doctors;
 
 namespace DoctorPatient.RestAPI
 {

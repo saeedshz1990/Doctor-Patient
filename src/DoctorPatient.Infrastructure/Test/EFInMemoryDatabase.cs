@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace DoctorPatient.Infrastructure.Test
 {
