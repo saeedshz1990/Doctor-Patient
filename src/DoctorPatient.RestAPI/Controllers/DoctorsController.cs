@@ -32,6 +32,13 @@ namespace DoctorPatient.RestAPI.Controllers
         public void Update([FromRoute] int id, [FromBody] UpdateDoctorDto dto)
         {
             _doctorService.Update(dto,id);
+
         }
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            _doctorService.Delete(id);
+        }        
+
     }
 }

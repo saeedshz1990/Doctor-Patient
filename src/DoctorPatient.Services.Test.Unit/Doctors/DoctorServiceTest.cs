@@ -97,7 +97,7 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
             };
 
             _sut.Update(dto, doctor.Id);
-          
+
             _context.Doctors.Should()
                 .Contain(_ => _.NationalCode == "2280506504");
         }
@@ -122,7 +122,35 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
 
             Action expected = () => _sut.Update(dto, doctor.Id);
             expected.Should().ThrowExactly<DoctorNationalCodeIsExistsInDatabase>();
-           
+
+        }
+
+        [Fact]
+        public void Delete_deletes_Doctor_Properly()
+        {
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Programmer");
+
+            _context.Manipulate(_ =>
+                _doctorRepository.Add(doctor));
+            _sut.Delete(doctor.Id);
+            _context.Doctors
+                .Should()
+                .HaveCount(0);
+        }
+
+        [Fact]
+        public void DeleteThrow_DoctorId_IsNotExistInDatabse()
+        {
+            var testDoctorid = 4152;
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Programmer");
+
+            _context.Manipulate(_ => _.Doctors.Add(doctor));
+            Action expected = () => _sut.Delete(testDoctorid);
+            expected.Should().ThrowExactly<DoctorIdDoesNotExistException>();
+
+
         }
 
         private static UpdateDoctorDto GenerateUpdateDoctorDto()

@@ -43,7 +43,7 @@ namespace DoctorPatient.Persistence.EF.Doctors
 
         public void Update(Doctor doctor, int id)
         {
-            
+
         }
 
         public Doctor FindById(int id)
@@ -54,6 +54,15 @@ namespace DoctorPatient.Persistence.EF.Doctors
         public bool IsExistNationalCode(string nationalCode)
         {
             return _context.Doctors.Any(_ => _.NationalCode == nationalCode);
+        }
+
+        public void Delete(int id)
+        {
+            var doctor = _context
+                .Doctors
+                .FirstOrDefault(_ => _.Id == id);
+
+            _context.Remove(doctor);
         }
     }
 }

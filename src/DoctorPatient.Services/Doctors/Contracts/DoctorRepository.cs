@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DoctorPatient.Entities;
 using DoctorPatient.Infrastructure.Application;
 
@@ -12,5 +13,6 @@ namespace DoctorPatient.Services.Doctors.Contracts
         void Update(Doctor doctor ,int id);
         Doctor FindById(int id);
         bool IsExistNationalCode(string nationalCode);
+        void Delete(int id);
     }
 }
