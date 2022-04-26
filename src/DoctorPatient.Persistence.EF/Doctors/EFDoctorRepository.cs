@@ -40,5 +40,20 @@ namespace DoctorPatient.Persistence.EF.Doctors
                 }).ToList();
             return doctor;
         }
+
+        public void Update(Doctor doctor, int id)
+        {
+            
+        }
+
+        public Doctor FindById(int id)
+        {
+            return _context.Doctors.Find(id);
+        }
+
+        public bool IsExistNationalCode(string nationalCode)
+        {
+            return _context.Doctors.Any(_ => _.NationalCode == nationalCode);
+        }
     }
 }

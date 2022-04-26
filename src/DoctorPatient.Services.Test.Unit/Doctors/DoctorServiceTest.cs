@@ -48,10 +48,10 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
         [Fact]
         public void AddThrow_DoctorIsExist_When_NationalCode_IsExist()
         {
-           var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Programmer");
-           _context.Manipulate(_ => _.Doctors.Add(doctor));
-           
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                 "2280509504", "Programmer");
+            _context.Manipulate(_ => _.Doctors.Add(doctor));
+
             AddDoctorDto dto = new AddDoctorDto
             {
                 FirstName = "Saeed",
@@ -59,7 +59,7 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
                 NationalCode = "2280509504",
                 Field = "Programmer"
             };
-          
+
             Action expected = () => _sut.Add(dto);
             expected.Should().ThrowExactly<DoctorNationalCodeExistException>();
         }
@@ -77,10 +77,68 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
 
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.NationalCode == "2280509504");
+        }
+
+        [Fact]
+        public void Update_updates_Doctors_Properly()
+        {
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2480509504", "Programmer");
+
+            _context.Manipulate(_ =>
+                _.Doctors.Add(doctor));
+
+            var dto = new UpdateDoctorDto
+            {
+                FirstName = "Saeed",
+                LastName = "Ansari",
+                NationalCode = "2280506504",
+                Field = "Programmer"
+            };
+
+            _sut.Update(dto, doctor.Id);
+          
+            _context.Doctors.Should()
+                .Contain(_ => _.NationalCode == "2280506504");
+        }
+
+        [Fact]
+        public void UpdateThrow_DoctorWithThisIdDoesNotExistException_if_Doctor_Doesnot_Exist()
+        {
+            var testDoctorid = 4152;
+
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Programmer");
+            _context.Manipulate(x => x.Doctors.Add(doctor));
+
+            UpdateDoctorDto dto = new UpdateDoctorDto
+            {
+                Id = 1,
+                FirstName = "Saeed",
+                LastName = "Ansari",
+                NationalCode = "2280509504",
+                Field = "Programmer"
+            };
+
+            Action expected = () => _sut.Update(dto, doctor.Id);
+            expected.Should().ThrowExactly<DoctorNationalCodeIsExistsInDatabase>();
+           
+        }
+
+        private static UpdateDoctorDto GenerateUpdateDoctorDto()
+        {
+            return new UpdateDoctorDto
+            {
+                Field = "Brain",
+                FirstName = "Saeed",
+                LastName = "Ansari",
+                NationalCode = "2280509504",
+                Id = 1
+
+            };
 
         }
 
-        
         private static List<Doctor> CreateListDoctor()
         {
             var doctor = new List<Doctor>

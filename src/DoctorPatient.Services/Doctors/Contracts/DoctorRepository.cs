@@ -9,5 +9,8 @@ namespace DoctorPatient.Services.Doctors.Contracts
         void Add(Doctor doctor);
         bool IsNationalCodeExist(string nationalCode);
         IList<GetDoctorDto> GetAll();
+        void Update(Doctor doctor ,int id);
+        Doctor FindById(int id);
+        bool IsExistNationalCode(string nationalCode);
     }
 }

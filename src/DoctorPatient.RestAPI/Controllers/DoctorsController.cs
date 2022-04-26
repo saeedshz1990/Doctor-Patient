@@ -26,5 +26,12 @@ namespace DoctorPatient.RestAPI.Controllers
         {
             return _doctorService.GetAll();
         }
+
+
+        [HttpPut("{id}")]
+        public void Update([FromRoute] int id, [FromBody] UpdateDoctorDto dto)
+        {
+            _doctorService.Update(dto,id);
+        }
     }
 }

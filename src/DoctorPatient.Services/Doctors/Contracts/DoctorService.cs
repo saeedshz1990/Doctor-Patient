@@ -7,5 +7,6 @@ namespace DoctorPatient.Services.Doctors.Contracts
     {
         void Add(AddDoctorDto dto);
         IList<GetDoctorDto> GetAll();
+        void Update(UpdateDoctorDto dto ,int id);
     }
 }

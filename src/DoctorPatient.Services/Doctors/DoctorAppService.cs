@@ -45,5 +45,25 @@ namespace DoctorPatient.Services.Doctors
         {
             return _doctorRepository.GetAll();
         }
+
+        public void Update(UpdateDoctorDto dto, int id)
+        {
+            var doctor = _doctorRepository.FindById(id);
+            var isExistsNationalCode = _doctorRepository
+                .IsExistNationalCode(dto.NationalCode);
+
+            if (isExistsNationalCode == true)
+            {
+                throw new DoctorNationalCodeIsExistsInDatabase();
+            }
+            else
+            {
+                doctor.FirstName = dto.FirstName;
+                doctor.LastName = dto.LastName;
+                doctor.Field = dto.Field;
+                doctor.NationalCode = dto.NationalCode;
+                _unitOfWork.Commit();
+            }
+        }
     }
 }
