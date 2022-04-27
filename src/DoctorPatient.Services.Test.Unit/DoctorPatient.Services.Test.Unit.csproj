@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Appointments\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DoctorPatient.Persistence.EF\DoctorPatient.Persistence.EF.csproj" />
     <ProjectReference Include="..\DoctorPatient.Test.Tools\DoctorPatient.Test.Tools.csproj" />
   </ItemGroup>

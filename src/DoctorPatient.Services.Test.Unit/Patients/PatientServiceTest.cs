@@ -36,11 +36,11 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         {
             AddPatientDto dto = GenerateAddPatientDto();
             var patient = CreateListPatient();
-
             _context.Manipulate(_ =>
                 _.Patients.AddRange(patient));
 
             _sut.Add(dto);
+            
             _context.Patients.Should()
                 .Contain(_ => _.NationalCode == dto.NationalCode);
         }
@@ -57,7 +57,6 @@ namespace DoctorPatient.Services.Test.Unit.Patients
                 FirstName = "Saeed",
                 LastName = "Ansari",
                 NationalCode = "2280509504"
-               
             };
 
             Action expected = () => _sut.Add(dto);
@@ -69,12 +68,10 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         {
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
-
             _context.Manipulate(_ =>
                 _.Patients.AddRange(patient));
 
             var expected = _sut.GetAll();
-
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.NationalCode == "2280509504");
         }
@@ -96,7 +93,6 @@ namespace DoctorPatient.Services.Test.Unit.Patients
                 };
 
             _sut.Update(dto, patient.Id);
-
             _context.Patients.Should()
                 .Contain(_ => _.NationalCode == "2280506504");
         }
@@ -105,7 +101,6 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         public void UpdateThrow_PatientWithThisIdDoesNotExistException_if_Patient_Doesnot_Exist()
         {
             var testPatientid = 4152;
-
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
             _context.Manipulate(x => x.Patients.Add(patient));
@@ -121,7 +116,6 @@ namespace DoctorPatient.Services.Test.Unit.Patients
 
             Action expected = () => _sut.Update(dto, patient.Id);
             expected.Should().ThrowExactly<PatientNationalCodeExistException>();
-
         }
 
         [Fact]
@@ -129,9 +123,9 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         {
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
-
             _context.Manipulate(_ =>
                 _patientRepository.Add(patient));
+            
             _sut.Delete(patient.Id);
             _context.Patients
                 .Should()
@@ -146,10 +140,9 @@ namespace DoctorPatient.Services.Test.Unit.Patients
                 "2280509504");
 
             _context.Manipulate(_ => _.Patients.Add(patient));
+            
             Action expected = () => _sut.Delete(testPatientId);
             expected.Should().ThrowExactly<PatientIdDoesNotExistException>();
-
-
         }
 
         private static List<Patient> CreateListPatient()

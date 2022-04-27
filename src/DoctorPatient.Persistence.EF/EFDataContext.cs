@@ -13,7 +13,7 @@ namespace DoctorPatient.Persistence.EF
         //public EFDataContext(string connectionString) :
         //    this(new DbContextOptionsBuilder().UseSqlServer(connectionString).Options)
         //{ }
-        
+
         public EFDataContext(DbContextOptions<EFDataContext> options) : base(options)
         {
         }
@@ -23,7 +23,7 @@ namespace DoctorPatient.Persistence.EF
         {
             base.OnModelCreating(modelBuilder);
             
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DoctorEntityMap).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EFDataContext).Assembly);
         }
     }
 }
