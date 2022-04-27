@@ -56,5 +56,11 @@ namespace DoctorPatient.Persistence.EF.Appointments
         {
             return _context.Appointments.Count(_ => _.DoctorId == doctorId);
         }
+
+        public void Delete(int id)
+        {
+            var doctor = _context.Appointments.Find(id);
+            _context.Remove(doctor);
+        }
     }
 }

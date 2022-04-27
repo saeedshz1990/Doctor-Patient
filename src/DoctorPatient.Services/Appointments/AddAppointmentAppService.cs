@@ -74,5 +74,19 @@ namespace DoctorPatient.Services.Appointments
 
             _unitOfWork.Commit();
         }
+
+        public void Delete(int id)
+        {
+            var appointment = _appointmentRepository.FindById(id);
+            if (appointment != null)
+            {
+                _appointmentRepository.Delete(id);
+                _unitOfWork.Commit();
+            }
+            else
+            {
+                throw new AppointmentNotFoundException();
+            }
+        }
     }
 }

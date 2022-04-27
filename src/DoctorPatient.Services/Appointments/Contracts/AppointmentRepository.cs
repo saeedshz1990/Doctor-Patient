@@ -9,11 +9,10 @@ namespace DoctorPatient.Services.Appointments.Contracts
     {
         void Add(Appointment appointment);
         int GetCountOfDoctorsAppointments(int doctorId,int patientId ,DateTime date);
-
         List<GetAppointmentDto> GetAll();
         void Update(int id, Appointment appointment);
         Appointment FindById(int id);
         int GetAppointmentCountByDoctorId(int doctorId);
-
+        void Delete(int id);
     }
 }

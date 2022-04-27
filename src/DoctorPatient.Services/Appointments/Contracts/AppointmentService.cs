@@ -7,7 +7,7 @@ namespace DoctorPatient.Services.Appointments.Contracts
     {
         void Add(AddAppointmentDto dto);
         List<GetAppointmentDto> GetAll();
-        void Update(int id, UpdateAppointmentDto dto);        
-
+        void Update(int id, UpdateAppointmentDto dto);
+        void Delete(int id);
     }
 }

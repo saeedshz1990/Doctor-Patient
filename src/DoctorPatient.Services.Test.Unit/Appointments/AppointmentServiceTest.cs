@@ -9,7 +9,6 @@ using DoctorPatient.Persistence.EF.Appointments;
 using DoctorPatient.Services.Appointments;
 using DoctorPatient.Services.Appointments.Contracts;
 using DoctorPatient.Services.Appointments.Exceptions;
-using DoctorPatient.Test.Tools.Appointment;
 using DoctorPatient.Test.Tools.Doctor;
 using DoctorPatient.Test.Tools.Patients;
 using FluentAssertions;
@@ -73,16 +72,7 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
 
             expected.Should().ThrowExactly<AppointmentDateException>();
         }
-        private static Doctor CreateDoctorWithFiveAppointmentInOneDay()
-        {
-            return new DoctorBuilder()
-                .WithAppointment(DateTime.Now.Date, "as", "fr", "7878")
-                .WithAppointment(DateTime.Now.Date, "gt", "nb", "6565")
-                .WithAppointment(DateTime.Now.Date, "ld", "yv", "4030")
-                .WithAppointment(DateTime.Now.Date, "mk", "qw", "6598")
-                .WithAppointment(DateTime.Now.Date, "nt", "cw", "1245")
-                .Build();
-        }
+       
         [Fact]
         public void GetAll_Appointments_return_patientAndDoctor()
         {
@@ -186,9 +176,73 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             expected.Should().ThrowExactly<DoctorDoesNotChangeException>();
         }
 
+        [Fact]
+        public void Delete_deletes_Appointments_properly()
+        {
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Brain");
+            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
+            
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+            _context.Manipulate(_ => _.Patients.AddRange(patient));
+            
+            var appointment = new Appointment
+            {
+                DoctorId = doctor.Id,
+                PatientId = patient.Id,
+                Date = new DateTime(2022, 04, 28)
+            };
+            _context.Manipulate(_ => _.Appointments.Add(appointment));
 
+            _sut.Delete(appointment.Id);
+            _context.Appointments.Should().HaveCount(0);
+
+
+
+            //Appointment appointment = AddAnAppointment();
+
+            //_sut.Delete(appointment.Id);
+
+            //_dataContext.Appointments.Should().NotContain(appointment);
+            //private Appointment AddAnAppointment()
+            //{
+            //    Doctor doctor = CreateADoctor();
+            //    Patient patient = CreateAPatient();
+            //    Appointment appointment = SetAnAppointment(doctor, patient);
+            //    _dataContext.Manipulate(_ => _.Appointments.Add(appointment));
+            //    return appointment;
+            //}
+
+        }
         
-        
+        [Fact]
+        public void Throw_exception_if_AppointmentDoesNotSetException_when_deleting_a_appointment()
+        {
+            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Brain");
+            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
+            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+
+            var fakeId = 100;
+
+            Action expected = () => _sut.Delete(fakeId);
+            expected.Should().ThrowExactly<AppointmentNotFoundException>();
+        }
+
+
+
+        private static Doctor CreateDoctorWithFiveAppointmentInOneDay()
+        {
+            return new DoctorBuilder()
+                .WithAppointment(DateTime.Now.Date, "as", "fr", "7878")
+                .WithAppointment(DateTime.Now.Date, "gt", "nb", "6565")
+                .WithAppointment(DateTime.Now.Date, "ld", "yv", "4030")
+                .WithAppointment(DateTime.Now.Date, "mk", "qw", "6598")
+                .WithAppointment(DateTime.Now.Date, "nt", "cw", "1245")
+                .Build();
+        }
         private static IList<Appointment> CreateListAppointment()
         {
             return new List<Appointment>
@@ -208,7 +262,6 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             };
 
         }
-
         private static IList<Appointment> AddAppointments(int patientId, int doctorId)
         {
             var appointment = new List<Appointment>
@@ -242,8 +295,6 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             return appointment;
 
         }
-
-
         private static AddAppointmentDto GenerateAddAppointmentDto(int patientId, int doctorId)
         {
             return new AddAppointmentDto
@@ -253,7 +304,6 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
                 Date = new DateTime(2022, 04, 30),
             };
         }
-
         private static UpdateAppointmentDto GenerateUpdateAppointmentDto(int patientId, int doctorId)
         {
             return new UpdateAppointmentDto
@@ -263,8 +313,6 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
                 Date = new DateTime(2022, 04, 27),
             };
         }
-
-
         public List<Patient> GenerateListOfPatient()
         {
             var patient = new List<Patient>
