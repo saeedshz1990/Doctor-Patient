@@ -74,7 +74,10 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(1);
-            expected.Should().Contain(_ => _.NationalCode == "2280509504");
+            expected.Should().Contain(_ => _.NationalCode == doctor.NationalCode);
+            expected.Should().Contain(_ => _.FirstName== doctor.FirstName);
+            expected.Should().Contain(_ => _.LastName== doctor.LastName);
+            expected.Should().Contain(_ => _.Field == doctor.Field);
         }
 
         [Fact]
@@ -82,8 +85,7 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
         {
             var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
                 "2480509504", "Programmer");
-            _context.Manipulate(_ =>
-                _.Doctors.Add(doctor));
+            _context.Manipulate(_ => _.Doctors.Add(doctor));
 
             var dto = new UpdateDoctorDto
             {
@@ -117,6 +119,7 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
             };
 
             Action expected = () => _sut.Update(dto, doctor.Id);
+            
             expected.Should().ThrowExactly<DoctorNationalCodeIsExistsInDatabase>();
         }
 
@@ -125,8 +128,7 @@ namespace DoctorPatient.Services.Test.Unit.Doctors
         {
             var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
                 "2280509504", "Programmer");
-            _context.Manipulate(_ =>
-                _doctorRepository.Add(doctor));
+            _context.Manipulate(_ => _doctorRepository.Add(doctor));
 
             _sut.Delete(doctor.Id);
 

@@ -5,7 +5,6 @@ using DoctorPatient.Infrastructure.Application;
 using DoctorPatient.Infrastructure.Test;
 using DoctorPatient.Persistence.EF;
 using DoctorPatient.Persistence.EF.Patients;
-using DoctorPatient.Services.Doctors.Exceptions;
 using DoctorPatient.Services.Patients;
 using DoctorPatient.Services.Patients.Contracts;
 using DoctorPatient.Services.Patients.Exceptions;
@@ -36,13 +35,11 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         {
             AddPatientDto dto = GenerateAddPatientDto();
             var patient = CreateListPatient();
-            _context.Manipulate(_ =>
-                _.Patients.AddRange(patient));
+            _context.Manipulate(_ => _.Patients.AddRange(patient));
 
             _sut.Add(dto);
             
-            _context.Patients.Should()
-                .Contain(_ => _.NationalCode == dto.NationalCode);
+            _context.Patients.Should().Contain(_ => _.NationalCode == dto.NationalCode);
         }
 
         [Fact]
@@ -60,6 +57,7 @@ namespace DoctorPatient.Services.Test.Unit.Patients
             };
 
             Action expected = () => _sut.Add(dto);
+        
             expected.Should().ThrowExactly<PatientNationalCodeExistException>();
         }
 
@@ -68,10 +66,10 @@ namespace DoctorPatient.Services.Test.Unit.Patients
         {
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
-            _context.Manipulate(_ =>
-                _.Patients.AddRange(patient));
+            _context.Manipulate(_ => _.Patients.AddRange(patient));
 
             var expected = _sut.GetAll();
+            
             expected.Should().HaveCount(1);
             expected.Should().Contain(_ => _.NationalCode == "2280509504");
         }
@@ -138,10 +136,10 @@ namespace DoctorPatient.Services.Test.Unit.Patients
             var testPatientId = 415;
             var patient = CreatePatientFactory.Create("Saeed", "Ansari",
                 "2280509504");
-
             _context.Manipulate(_ => _.Patients.Add(patient));
             
             Action expected = () => _sut.Delete(testPatientId);
+            
             expected.Should().ThrowExactly<PatientIdDoesNotExistException>();
         }
 

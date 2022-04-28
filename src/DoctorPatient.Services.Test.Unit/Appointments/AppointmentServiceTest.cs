@@ -35,13 +35,8 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
         [Fact]
         public void Add_adds_Appointment_Properly()
         {
-            Doctor doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Brain");
-            _context.Manipulate(_ => _.Doctors.Add(doctor));
-
-            Patient patient = CreatePatientFactory.Create("Saeed", "Ansari",
-                "2280509504");
-            _context.Manipulate(_ => _.Patients.Add(patient));
+            var doctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
 
             AddAppointmentDto dto = GenerateAddAppointmentDto(doctor.Id, patient.Id);
 
@@ -53,13 +48,14 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             expected.PatientId.Should().Be(dto.PatientId);
         }
 
+      
+
         [Fact]
         public void AddThrow_Exception_WhenPatientdoesnot_Morethanof_Two()
         {
             Doctor doctor = CreateDoctorWithFiveAppointmentInOneDay();
             _context.Manipulate(_ => _.AddRange(doctor));
-            var patient = CreatePatientFactory.Create("saeed", "ansari", "2280509504");
-            _context.Manipulate(_ => _.Add(patient));
+            var patient = CreateOnePatient();
 
             var dto = new AddAppointmentDto
             {
@@ -76,14 +72,13 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
         [Fact]
         public void GetAll_Appointments_return_patientAndDoctor()
         {
-            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Brain");
-            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
-            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
-                "2280509504");
-            _context.Manipulate(_ => _.Patients.AddRange(patient));
+            var doctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
+
             var appointments = GenerateAddAppointmentDto(patient.Id, doctor.Id);
+
             _sut.Add(appointments);
+            
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(1);
@@ -92,12 +87,8 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
         [Fact]
         public void Update_updates_appoint()
         {
-            var firstDoctor = CreateDoctorFactory.Create("saeed", "ansari", "2280509504", "brain");
-            _context.Manipulate(_ => _.Add(firstDoctor));
-
-            var patient = CreatePatientFactory.Create("saeed", "ansari", "2280509504");
-            _context.Manipulate(_ => _.Add(patient));
-
+            var firstDoctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
             var secondDoctor = CreatePatientFactory.Create("saeed", "ansari", "2280509504");
             _context.Manipulate(_ => _.Add(secondDoctor));
 
@@ -107,6 +98,7 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
                 PatientId = patient.Id,
                 Date = new DateTime(2022, 04, 27)
             };
+            
             _context.Manipulate(_ => _.Add(appointment));
 
             var dto = new UpdateAppointmentDto
@@ -117,6 +109,7 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             };
 
             _sut.Update(firstDoctor.Id, dto);
+            
             var expected = _context.Appointments.FirstOrDefault();
             expected.DoctorId.Should().Be(dto.DoctorId);
             expected.PatientId.Should().Be(dto.PatientId);
@@ -128,16 +121,9 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
         {
             Doctor doctor = CreateDoctorWithFiveAppointmentInOneDay();
             _context.Manipulate(_ => _.Add(doctor));
+            var patient = CreateOnePatient();
 
-            var patient = CreatePatientFactory.Create("saeed", "ansari", "2280509504");
-            _context.Manipulate(_ => _.Add(patient));
-
-            var dto = new UpdateAppointmentDto
-            {
-                DoctorId = doctor.Id,
-                PatientId = patient.Id,
-                Date = DateTime.Now.Date
-            };
+            var dto = CreateUpdateAppointmentDto(doctor, patient);
 
             Action expected = () => _sut.Update(doctor.Id, dto);
 
@@ -145,48 +131,63 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
 
         }
 
-        [Fact]
-        public void UpdateThrow_Exception_WhenPatient_DoesNot_Morethanof_Two()
+        private static UpdateAppointmentDto CreateUpdateAppointmentDto(Doctor doctor, Patient patient)
         {
-            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Brain");
-            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
-            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
-                "2280509504");
-            _context.Manipulate(_ => _.Patients.AddRange(patient));
-
-            var doctorFakeId = 234;
-
-            var appointment = new Appointment
+            var dto = new UpdateAppointmentDto
             {
                 DoctorId = doctor.Id,
                 PatientId = patient.Id,
-                Date = new DateTime(2022, 04, 27)
+                Date = DateTime.Now.Date
             };
-            _context.Manipulate(_ => _.Add(appointment));
+            return dto;
+        }
 
+        [Fact]
+        public void UpdateThrow_Exception_WhenPatient_DoesNot_Morethanof_Two()
+        {
+            var doctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
+
+            var doctorFakeId = 234;
+
+            CreateOnAppointment(doctor, patient);
+
+            var dto = CreateOneUpdateAppointmentDto(doctorFakeId, patient);
+
+            Action expected = () => _sut.Update(dto.DoctorId, dto);
+            
+            expected.Should().ThrowExactly<DoctorDoesNotChangeException>();
+        }
+
+        private static UpdateAppointmentDto CreateOneUpdateAppointmentDto(int doctorFakeId, Patient patient)
+        {
             var dto = new UpdateAppointmentDto
             {
                 DoctorId = doctorFakeId,
                 PatientId = patient.Id,
                 Date = new DateTime(2022, 04, 28)
             };
+            return dto;
+        }
 
-            Action expected = () => _sut.Update(dto.DoctorId, dto);
-            expected.Should().ThrowExactly<DoctorDoesNotChangeException>();
+        private void CreateOnAppointment(Doctor doctor, Patient patient)
+        {
+            var appointment = new Appointment
+            {
+                DoctorId = doctor.Id,
+                PatientId = patient.Id,
+                Date = new DateTime(2022, 04, 27)
+            };
+
+            _context.Manipulate(_ => _.Add(appointment));
         }
 
         [Fact]
         public void Delete_deletes_Appointments_properly()
         {
-            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Brain");
-            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
-            
-            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
-                "2280509504");
-            _context.Manipulate(_ => _.Patients.AddRange(patient));
-            
+            var doctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
+
             var appointment = new Appointment
             {
                 DoctorId = doctor.Id,
@@ -197,42 +198,21 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
 
             _sut.Delete(appointment.Id);
             _context.Appointments.Should().HaveCount(0);
-
-
-
-            //Appointment appointment = AddAnAppointment();
-
-            //_sut.Delete(appointment.Id);
-
-            //_dataContext.Appointments.Should().NotContain(appointment);
-            //private Appointment AddAnAppointment()
-            //{
-            //    Doctor doctor = CreateADoctor();
-            //    Patient patient = CreateAPatient();
-            //    Appointment appointment = SetAnAppointment(doctor, patient);
-            //    _dataContext.Manipulate(_ => _.Appointments.Add(appointment));
-            //    return appointment;
-            //}
-
+            
         }
         
         [Fact]
         public void Throw_exception_if_AppointmentDoesNotSetException_when_deleting_a_appointment()
         {
-            var doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
-                "2280509504", "Brain");
-            _context.Manipulate(_ => _.Doctors.AddRange(doctor));
-            var patient = CreatePatientFactory.Create("Saeed", "Ansari",
-                "2280509504");
+            var doctor = CreateOneDoctor();
+            var patient = CreateOnePatient();
 
             var fakeId = 100;
 
             Action expected = () => _sut.Delete(fakeId);
             expected.Should().ThrowExactly<AppointmentNotFoundException>();
         }
-
-
-
+        
         private static Doctor CreateDoctorWithFiveAppointmentInOneDay()
         {
             return new DoctorBuilder()
@@ -350,6 +330,21 @@ namespace DoctorPatient.Services.Test.Unit.Appointments
             };
 
             return patient;
+        }
+        private Patient CreateOnePatient()
+        {
+            Patient patient = CreatePatientFactory.Create("Saeed", "Ansari",
+                "2280509504");
+            _context.Manipulate(_ => _.Patients.Add(patient));
+            return patient;
+        }
+
+        private Doctor CreateOneDoctor()
+        {
+            Doctor doctor = CreateDoctorFactory.Create("Saeed", "Ansari",
+                "2280509504", "Brain");
+            _context.Manipulate(_ => _.Doctors.Add(doctor));
+            return doctor;
         }
 
     }
